@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <!-- Publish a new dog or edit an existing one (dog-form.html?id=). Publishers only. -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PawHome: אפליקציה לאימוץ כלבים שמחברת בין מאמצים לבין עמותות ומוסרים פרטיים.">
+    <title>פרסום כלב | PawHome</title>
+    <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700&family=Rubik:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="page-dog-form">
+    <a class="skip-link" href="#main">דילוג לתוכן הראשי</a>
+
+    <!-- Header: the same on every page. Links are shown or hidden by role in js/ui.js (data-show) -->
+    <header class="site-header">
+        <div class="container header-inner">
+            <a class="brand" href="index.html">
+                <img src="images/logo.svg" alt="" width="38" height="38">
+                <span>PawHome</span>
+            </a>
+
+            <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mainNav" aria-label="פתיחת התפריט">☰</button>
+
+            <nav id="mainNav" class="main-nav" aria-label="ניווט ראשי">
+                <ul class="nav-list">
+                    <li data-show="guest adopter"><a href="index.html">דף הבית</a></li>
+                    <li data-show="publisher"><a href="publisher.html">ניהול המודעות</a></li>
+                    <li data-show="publisher"><a href="dog-form.html">פרסום כלב</a></li>
+                    <li data-show="guest adopter publisher"><a href="dogs.html">חיפוש כלבים</a></li>
+                    <li data-show="adopter"><a href="my-requests.html">הבקשות שלי</a></li>
+                </ul>
+                <div class="nav-user">
+                    <a class="btn btn-outline btn-small" href="login.html" data-show="guest">התחברות</a>
+                    <a class="btn btn-primary btn-small" href="signup.html" data-show="guest">הרשמה</a>
+                    <a class="user-chip" href="profile.html" data-show="adopter publisher" title="הפרופיל שלי">
+                        <span class="user-avatar" aria-hidden="true">👤</span>
+                        <span id="navUserName">הפרופיל שלי</span>
+                    </a>
+                    <button class="btn btn-outline btn-small" type="button" data-logout data-show="adopter publisher">התנתקות</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main id="main">
+
+        <section class="container page-section">
+            <h1 class="page-title" id="formTitle">פרסום כלב לאימוץ</h1>
+            <p class="page-subtitle" id="formSubtitle">מלאו את הפרטים כמה שיותר מדויק, כדי שבדיקת ההתאמה תעבוד נכון.</p>
+
+            <form id="dogForm" class="card" novalidate>
+                <p id="dogFormMessage" class="form-message" role="alert"></p>
+
+                <fieldset class="form-section">
+                    <legend>פרטי הכלב</legend>
+                    <div class="form-grid">
+                <div class="form-field">
+                    <label for="dogName">שם הכלב</label>
+                    <input type="text" id="dogName" name="dogName" maxlength="20" required>
+                    <p class="field-error" id="dogNameError"></p>
+                </div>
+                <div class="form-field">
+                    <label for="dogAge">גיל (בשנים)</label>
+                    <input type="number" id="dogAge" name="dogAge" min="0" max="20" step="1" inputmode="numeric" required>
+                    <p class="field-hint" id="dogAgeHint">גור עד שנה: 0</p>
+                    <p class="field-error" id="dogAgeError"></p>
+                </div>
+                <div class="form-field">
+                    <label for="dogSize">גודל</label>
+                    <select id="dogSize" name="dogSize" required><option value="">בחירת גודל</option><option value="small">קטן</option><option value="medium">בינוני</option><option value="large">גדול</option></select>
+                    <p class="field-error" id="dogSizeError"></p>
+                </div>
+                <div class="form-field">
+                    <label for="dogCity">עיר</label>
+                    <select id="dogCity" name="dogCity" required></select>
+                    <p class="field-error" id="dogCityError"></p>
+                </div>
+                <div class="form-field">
+                    <label for="dogBreed">גזע <span class="optional">(רשות)</span></label>
+                    <input type="text" id="dogBreed" name="dogBreed" maxlength="30" placeholder="לדוגמה: מעורב לברדור">
+                    <p class="field-error" id="dogBreedError"></p>
+                </div>
+                    </div>
+                <fieldset class="choice-group" id="dogGenderGroup">
+                    <legend>מין</legend>
+                    <div class="choice-row">
+                        <label class="choice-pill"><input type="radio" name="dogGender" value="male"><span>זכר</span></label>
+                        <label class="choice-pill"><input type="radio" name="dogGender" value="female"><span>נקבה</span></label>
+                    </div>
+                    <p class="field-error" id="dogGenderError"></p>
+                </fieldset>
+                </fieldset>
+
+                <fieldset class="form-section">
+                    <legend>אופי והתאמה</legend>
+                <fieldset class="choice-group" id="dogEnergyGroup">
+                    <legend>רמת אנרגיה</legend>
+                    <div class="choice-row">
+                        <label class="choice-pill"><input type="radio" name="dogEnergy" value="low"><span>נמוכה</span></label>
+                        <label class="choice-pill"><input type="radio" name="dogEnergy" value="medium"><span>בינונית</span></label>
+                        <label class="choice-pill"><input type="radio" name="dogEnergy" value="high"><span>גבוהה</span></label>
+                    </div>
+                    <p class="field-error" id="dogEnergyError"></p>
+                </fieldset>
+                <fieldset class="choice-group" id="goodWithKidsGroup">
+                    <legend>מסתדר עם ילדים?</legend>
+                    <div class="choice-row">
+                        <label class="choice-pill"><input type="radio" name="goodWithKids" value="yes"><span>כן</span></label>
+                        <label class="choice-pill"><input type="radio" name="goodWithKids" value="no"><span>לא</span></label>
+                    </div>
+                    <p class="field-error" id="goodWithKidsError"></p>
+                </fieldset>
+                <fieldset class="choice-group" id="goodWithDogsGroup">
+                    <legend>מסתדר עם כלבים אחרים?</legend>
+                    <div class="choice-row">
+                        <label class="choice-pill"><input type="radio" name="goodWithDogs" value="yes"><span>כן</span></label>
+                        <label class="choice-pill"><input type="radio" name="goodWithDogs" value="no"><span>לא</span></label>
+                    </div>
+                    <p class="field-error" id="goodWithDogsError"></p>
+                </fieldset>
+                <fieldset class="choice-group" id="needsYardGroup">
+                    <legend>זקוק לחצר?</legend>
+                    <div class="choice-row">
+                        <label class="choice-pill"><input type="radio" name="needsYard" value="yes"><span>כן</span></label>
+                        <label class="choice-pill"><input type="radio" name="needsYard" value="no"><span>לא</span></label>
+                    </div>
+                    <p class="field-error" id="needsYardError"></p>
+                </fieldset>
+                </fieldset>
+
+                <fieldset class="form-section">
+                    <legend>תמונה ותיאור</legend>
+                    <div class="form-field">
+                        <label for="dogImage">תמונה של הכלב</label>
+                        <div class="image-upload">
+                            <div class="image-preview" id="imagePreview">עדיין לא נבחרה תמונה</div>
+                            <div>
+                                <input type="file" id="dogImage" name="dogImage" accept="image/jpeg,image/png">
+                                <p class="field-hint">JPG או PNG, עד 2MB</p>
+                            </div>
+                        </div>
+                        <p class="field-error" id="dogImageError"></p>
+                    </div>
+                    <div class="form-field">
+                        <label for="dogDescription">תיאור</label>
+                        <textarea id="dogDescription" name="dogDescription" maxlength="1000" placeholder="ספרו על האופי, ההרגלים והצרכים של הכלב" required></textarea>
+                        <p class="char-counter" id="descriptionCounter" aria-live="polite">0 / 1000 (לפחות 20)</p>
+                        <p class="field-error" id="dogDescriptionError"></p>
+                    </div>
+                </fieldset>
+
+                <div class="form-actions">
+                    <button class="btn btn-primary" type="submit" id="dogSubmit">פרסום</button>
+                    <a class="btn btn-outline" href="publisher.html">ביטול</a>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <!-- Footer: the same on every page -->
+    <footer class="site-footer">
+        <div class="container footer-grid">
+            <section>
+                <h2>PawHome</h2>
+                <p>מחברים בין כלבים שמחכים לבית לבין משפחות שמחכות להם. כל המודעות מתפרסמות על ידי עמותות ואנשים פרטיים.</p>
+                <div class="social-links">
+                    <a href="https://www.instagram.com/" target="_blank" rel="noopener" aria-label="אינסטגרם">IG</a>
+                    <a href="https://www.facebook.com/" target="_blank" rel="noopener" aria-label="פייסבוק">f</a>
+                </div>
+            </section>
+            <section>
+                <h2>מידע שימושי</h2>
+                <ul class="footer-links">
+                    <li><a href="index.html#how-it-works">איך זה עובד</a></li>
+                    <li><a href="index.html#faq">שאלות נפוצות</a></li>
+                    <li><a href="signup.html?type=publisher">מפרסמים כלב לאימוץ?</a></li>
+                </ul>
+            </section>
+            <section>
+                <h2>יצירת קשר</h2>
+                <ul class="footer-links">
+                    <li><a href="mailto:hello@pawhome.co.il">hello@pawhome.co.il</a></li>
+                    <li>א'–ה', 9:00 עד 17:00</li>
+                </ul>
+            </section>
+        </div>
+        <div class="container footer-bottom">
+            <span>© <span id="footerYear">2026</span> PawHome · פרויקט בקורס WEB, אוניברסיטת בן גוריון</span>
+            <button class="link-button" type="button" id="resetDemo">איפוס נתוני ההדגמה</button>
+        </div>
+    </footer>
+
+    <!-- Shared scripts (order matters), then the script of this page -->
+    <script src="js/data.js"></script>
+    <script src="js/match.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/validation.js"></script>
+    <script src="js/forms.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/dog-form.js"></script>
+</body>
+</html>
