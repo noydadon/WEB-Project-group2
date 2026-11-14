@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <!-- Sign up page in two steps: user type, then details (adopters also enter home details). -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PawHome: אפליקציה לאימוץ כלבים שמחברת בין מאמצים לבין עמותות ומוסרים פרטיים.">
+    <title>הרשמה | PawHome</title>
+    <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700&family=Rubik:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="page-auth">
+    <a class="skip-link" href="#main">דילוג לתוכן הראשי</a>
+
+    <!-- Header: the same on every page. Links are shown or hidden by role in js/ui.js (data-show) -->
+    <header class="site-header">
+        <div class="container header-inner">
+            <a class="brand" href="index.html">
+                <img src="images/logo.svg" alt="" width="38" height="38">
+                <span>PawHome</span>
+            </a>
+
+            <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mainNav" aria-label="פתיחת התפריט">☰</button>
+
+            <nav id="mainNav" class="main-nav" aria-label="ניווט ראשי">
+                <ul class="nav-list">
+                    <li data-show="guest adopter"><a href="index.html">דף הבית</a></li>
+                    <li data-show="publisher"><a href="publisher.html">ניהול המודעות</a></li>
+                    <li data-show="publisher"><a href="dog-form.html">פרסום כלב</a></li>
+                    <li data-show="guest adopter publisher"><a href="dogs.html">חיפוש כלבים</a></li>
+                    <li data-show="adopter"><a href="my-requests.html">הבקשות שלי</a></li>
+                </ul>
+                <div class="nav-user">
+                    <a class="btn btn-outline btn-small" href="login.html" data-show="guest">התחברות</a>
+                    <a class="btn btn-primary btn-small" href="signup.html" data-show="guest">הרשמה</a>
+                    <a class="user-chip" href="profile.html" data-show="adopter publisher" title="הפרופיל שלי">
+                        <span class="user-avatar" aria-hidden="true">👤</span>
+                        <span id="navUserName">הפרופיל שלי</span>
+                    </a>
+                    <button class="btn btn-outline btn-small" type="button" data-logout data-show="adopter publisher">התנתקות</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main id="main">
+
+        <section class="container page-section">
+            <div class="card fade-in" style="max-width:760px;margin-inline:auto">
+                <h1>הרשמה ל־PawHome</h1>
+                <p class="page-subtitle">שני שלבים קצרים והחשבון מוכן</p>
+
+                <ol class="stepper" aria-label="שלבי ההרשמה">
+                    <li id="stepperType" class="current">1. סוג משתמש</li>
+                    <li id="stepperDetails">2. פרטים</li>
+                </ol>
+
+                <form id="signupForm" novalidate>
+                    <!-- Step 1: choose the user type -->
+                    <section id="stepType" aria-labelledby="stepTypeTitle">
+                        <h2 id="stepTypeTitle">איך תשתמשו באתר?</h2>
+                        <fieldset class="choice-group" id="userTypeGroup">
+                            <legend class="visually-hidden">סוג משתמש</legend>
+                            <div class="type-cards">
+                                <label class="type-card">
+                                    <input type="radio" name="userType" value="adopter">
+                                    <span class="type-card-body">
+                                        <span class="type-icon" aria-hidden="true">🏡</span>
+                                        <strong>אני רוצה לאמץ</strong>
+                                        <small>חיפוש כלבים, בדיקת התאמה ושליחת בקשות</small>
+                                    </span>
+                                </label>
+                                <label class="type-card">
+                                    <input type="radio" name="userType" value="publisher">
+                                    <span class="type-card-body">
+                                        <span class="type-icon" aria-hidden="true">📣</span>
+                                        <strong>אני מפרסם כלב לאימוץ</strong>
+                                        <small>עמותה או אדם פרטי שמוסר כלב</small>
+                                    </span>
+                                </label>
+                            </div>
+                            <p class="field-error" id="userTypeError"></p>
+                        </fieldset>
+                        <button class="btn btn-primary" type="button" id="toDetails">המשך</button>
+                    </section>
+
+                    <!-- Step 2: details (adopter or publisher fields are shown by js/signup.js) -->
+                    <section id="stepDetails" hidden aria-labelledby="stepDetailsTitle">
+                        <h2 id="stepDetailsTitle">פרטים אישיים</h2>
+                        <p id="signupMessage" class="form-message" role="alert"></p>
+                        <fieldset class="form-section">
+                            <legend>פרטי קשר</legend>
+                            <div class="form-grid">
+                <div class="form-field">
+                    <label for="fullName">שם מלא או שם העמותה</label>
+                    <input type="text" id="fullName" name="fullName" autocomplete="name" maxlength="40" required>
+                    <p class="field-error" id="fullNameError"></p>
+                </div>
+                <div class="form-field">
+                    <label for="email">דואר אלקטרוני</label>
+                    <input type="email" id="email" name="email" autocomplete="email" maxlength="60" placeholder="name@example.com" required>
+                    <p class="field-error" id="emailError"></p>
+                </div>
+                <div class="form-field">
+                    <label for="phone">טלפון נייד</label>
+                    <input type="tel" id="phone" name="phone" autocomplete="tel" maxlength="12" placeholder="05X-XXXXXXX" inputmode="numeric" required>
+                    <p class="field-hint" id="phoneHint">10 ספרות שמתחילות ב־05</p>
+                    <p class="field-error" id="phoneError"></p>
+                </div>
+                <div class="form-field">
+                    <label for="city">עיר</label>
+                    <select id="city" name="city" required></select>
+                    <p class="field-error" id="cityError"></p>
+                </div>
+                            </div>
+                        </fieldset>
+
+                        <fieldset class="form-section">
+                            <legend>סיסמה</legend>
+                            <div class="form-grid">
+                                <div class="form-field">
+                                    <label for="password">סיסמה</label>
+                                    <div class="password-wrapper">
+                        <input type="password" id="password" name="password" autocomplete="new-password" maxlength="20" placeholder="" required>
+                        <button type="button" class="toggle-password" data-target="password" aria-label="הצגת הסיסמה" aria-pressed="false">הצגה</button>
+                    </div>
+                                    <p class="field-hint">8 עד 20 תווים, לפחות אות אחת באנגלית וספרה אחת</p>
+                                    <p class="field-error" id="passwordError"></p>
+                                </div>
+                                <div class="form-field">
+                                    <label for="confirmPassword">אימות סיסמה</label>
+                                    <div class="password-wrapper">
+                        <input type="password" id="confirmPassword" name="confirmPassword" autocomplete="new-password" maxlength="20" placeholder="" required>
+                        <button type="button" class="toggle-password" data-target="confirmPassword" aria-label="הצגת הסיסמה" aria-pressed="false">הצגה</button>
+                    </div>
+                                    <p class="field-error" id="confirmPasswordError"></p>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <fieldset class="form-section" id="adopterFields" hidden>
+                            <legend>פרטי הבית (לבדיקת ההתאמה)</legend>
+                <fieldset class="choice-group" id="homeTypeGroup">
+                    <legend>סוג מגורים</legend>
+                    <div class="choice-row">
+                        <label class="choice-pill"><input type="radio" name="homeType" value="apartment"><span>דירה</span></label>
+                        <label class="choice-pill"><input type="radio" name="homeType" value="house"><span>בית עם חצר</span></label>
+                    </div>
+                    <p class="field-error" id="homeTypeError"></p>
+                </fieldset>
+                <fieldset class="choice-group" id="hasKidsGroup">
+                    <legend>יש ילדים בבית?</legend>
+                    <div class="choice-row">
+                        <label class="choice-pill"><input type="radio" name="hasKids" value="yes"><span>כן</span></label>
+                        <label class="choice-pill"><input type="radio" name="hasKids" value="no"><span>לא</span></label>
+                    </div>
+                    <p class="field-error" id="hasKidsError"></p>
+                </fieldset>
+                <fieldset class="choice-group" id="hasDogsGroup">
+                    <legend>יש כלב נוסף בבית?</legend>
+                    <div class="choice-row">
+                        <label class="choice-pill"><input type="radio" name="hasDogs" value="yes"><span>כן</span></label>
+                        <label class="choice-pill"><input type="radio" name="hasDogs" value="no"><span>לא</span></label>
+                    </div>
+                    <p class="field-error" id="hasDogsError"></p>
+                </fieldset>
+                <fieldset class="choice-group" id="hoursAwayGroup">
+                    <legend>כמה שעות ביום הבית ריק?</legend>
+                    <div class="choice-row">
+                        <label class="choice-pill"><input type="radio" name="hoursAway" value="upTo4"><span>עד 4 שעות</span></label>
+                        <label class="choice-pill"><input type="radio" name="hoursAway" value="4to8"><span>4 עד 8 שעות</span></label>
+                        <label class="choice-pill"><input type="radio" name="hoursAway" value="over8"><span>יותר מ־8 שעות</span></label>
+                    </div>
+                    <p class="field-error" id="hoursAwayError"></p>
+                </fieldset>
+                        </fieldset>
+
+                        <fieldset class="form-section" id="publisherFields" hidden>
+                            <legend>פרטי המפרסם</legend>
+                <fieldset class="choice-group" id="publisherKindGroup">
+                    <legend>סוג מפרסם</legend>
+                    <div class="choice-row">
+                        <label class="choice-pill"><input type="radio" name="publisherKind" value="org"><span>עמותה</span></label>
+                        <label class="choice-pill"><input type="radio" name="publisherKind" value="private"><span>אדם פרטי</span></label>
+                    </div>
+                    <p class="field-hint">משמש לתצוגה בלבד. לעמותות ולאנשים פרטיים יש אותן הרשאות.</p>
+                    <p class="field-error" id="publisherKindError"></p>
+                </fieldset>
+                        </fieldset>
+
+                        <div class="choice-group" id="termsGroup">
+                            <label class="check-line">
+                                <input type="checkbox" id="terms" name="terms">
+                                <span>קראתי ואני מסכים/ה שפרטי הקשר שלי יועברו לצד השני רק לאחר אישור בקשת אימוץ.</span>
+                            </label>
+                            <p class="field-error" id="termsError"></p>
+                        </div>
+
+                        <div class="form-actions">
+                            <button class="btn btn-primary" type="submit" id="signupButton">יצירת חשבון</button>
+                            <button class="btn btn-outline" type="button" id="backToType">חזרה</button>
+                        </div>
+                    </section>
+                </form>
+                <p class="switch-line">כבר יש לך חשבון? <a href="login.html">להתחברות</a></p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer: the same on every page -->
+    <footer class="site-footer">
+        <div class="container footer-grid">
+            <section>
+                <h2>PawHome</h2>
+                <p>מחברים בין כלבים שמחכים לבית לבין משפחות שמחכות להם. כל המודעות מתפרסמות על ידי עמותות ואנשים פרטיים.</p>
+                <div class="social-links">
+                    <a href="https://www.instagram.com/" target="_blank" rel="noopener" aria-label="אינסטגרם">IG</a>
+                    <a href="https://www.facebook.com/" target="_blank" rel="noopener" aria-label="פייסבוק">f</a>
+                </div>
+            </section>
+            <section>
+                <h2>מידע שימושי</h2>
+                <ul class="footer-links">
+                    <li><a href="index.html#how-it-works">איך זה עובד</a></li>
+                    <li><a href="index.html#faq">שאלות נפוצות</a></li>
+                    <li><a href="signup.html?type=publisher">מפרסמים כלב לאימוץ?</a></li>
+                </ul>
+            </section>
+            <section>
+                <h2>יצירת קשר</h2>
+                <ul class="footer-links">
+                    <li><a href="mailto:hello@pawhome.co.il">hello@pawhome.co.il</a></li>
+                    <li>א'–ה', 9:00 עד 17:00</li>
+                </ul>
+            </section>
+        </div>
+        <div class="container footer-bottom">
+            <span>© <span id="footerYear">2026</span> PawHome · פרויקט בקורס WEB, אוניברסיטת בן גוריון</span>
+            <button class="link-button" type="button" id="resetDemo">איפוס נתוני ההדגמה</button>
+        </div>
+    </footer>
+
+    <!-- Shared scripts (order matters), then the script of this page -->
+    <script src="js/data.js"></script>
+    <script src="js/match.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/validation.js"></script>
+    <script src="js/forms.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/signup.js"></script>
+</body>
+</html>
